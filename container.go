@@ -26,8 +26,6 @@ type container struct {
 	width, hight float64
 	winGap       float64
 
-	candleWidth int
-
 	globalTimeLeft, globalrealTimeRight       time.Time
 	setGlobalTimeLeft, setGlobalrealTimeRight bool
 
@@ -38,7 +36,7 @@ type container struct {
 	windows_id []string
 }
 
-func New(width, hight, candleWidth, winGap int) *container {
+func New(width, hight, winGap int) *container {
 
 	c := &container{
 		G:       svg.Group(),
@@ -49,10 +47,9 @@ func New(width, hight, candleWidth, winGap int) *container {
 		topField:    5,
 		bottomField: 20,
 
-		candleWidth: candleWidth,
-		width:       float64(width),
-		hight:       float64(hight),
-		winGap:      float64(winGap),
+		width:  float64(width),
+		hight:  float64(hight),
+		winGap: float64(winGap),
 	}
 
 	st := style.Style().Fill(colors.GRAY)

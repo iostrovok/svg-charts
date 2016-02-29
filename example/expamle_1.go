@@ -25,7 +25,7 @@ type Candle struct {
 }
 
 const (
-	WIDTH = 1200
+	WIDTH = 1300
 	HIGH  = 650
 
 	candleWidth     = 6
@@ -37,13 +37,6 @@ const (
 	GoodStatusFile = 1
 	DEBUG          = false
 	// TIME_FRAME = 1 * time.Minute
-
-	CANDEL_INFO     = "%s\nOpen: %d\nClose: %d\nLow: %d\nHigh: %d\nDelta: %d\nMiddel: %d\n"
-	CANDEL_INFO_ADD = "%s\n-------\nx1: %d\ny1: %d\ny2: %d\nh_y1: %d\nh_y2: %d\n"
-	RED             = "rgb(220,60,60)"
-	GREEN           = "rgb(60,220,60)"
-	LIGHT_GRAY      = "rgb(240,240,240)"
-	GRAY            = "rgb(196,196,196)"
 
 	FILE_OUT = "./index.svg"
 )
@@ -79,24 +72,24 @@ func testHistogram() []Point {
 
 func testCandles() []Candle {
 	return []Candle{
-		{x: "2015-02-01 15:00:00", open: 100, clos: 100, high: 200, low: 100},
-		{x: "2015-02-01 15:05:00", open: 100, clos: 100, high: 200, low: 100},
-		{x: "2015-02-01 15:10:00", open: 100, clos: 100, high: 200, low: 100},
-		{x: "2015-02-01 15:15:00", open: 100, clos: 100, high: 200, low: 100},
-		{x: "2015-02-01 15:20:00", open: 100, clos: 100, high: 200, low: 100},
-		{x: "2015-02-01 15:25:00", open: 100, clos: 100, high: 200, low: 100},
-		{x: "2015-02-01 15:30:00", open: 100, clos: 100, high: 200, low: 100},
-		{x: "2015-02-01 15:35:00", open: 100, clos: 100, high: 200, low: 100},
-		{x: "2015-02-01 15:40:00", open: 100, clos: 100, high: 200, low: 100},
-		{x: "2015-02-01 15:45:00", open: 100, clos: 100, high: 200, low: 100},
-		{x: "2015-02-01 15:50:00", open: 100, clos: 100, high: 200, low: 100},
-		{x: "2015-02-01 15:55:00", open: 100, clos: 100, high: 200, low: 100},
+		{x: "2015-02-01 15:00:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:05:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:10:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:15:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:20:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:25:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:30:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:35:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:40:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:45:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:50:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:55:00", open: 100, clos: 200, high: 250, low: 50},
 	}
 }
 
 func main() {
 
-	g := chart.New(WIDTH-100, HIGH-50, candleWidth, 5)
+	g := chart.New(WIDTH-100, HIGH-50, 5)
 
 	realYBottom := 100
 	realYTop := 1000
@@ -118,9 +111,9 @@ func main() {
 		}
 
 		// fmt.Printf("%s. Open: %d, Close: %d, High: %d, Low: %d\n", c.TimeOpen.Format("2006-01-02 15:04:05"), c.Open(), c.Close(), c.High(), c.Low())
-		g.StockCandle("candles", t, 50, c.open, c.clos, c.high, c.low)
+		g.StockCandle("candles", 50, t, c.open, c.clos, c.high, c.low)
 		// g.Volume("volume", c.TimeOpen, c.Volume())
-		g.StockCandle("candles2", t, 50, c.open, c.clos, c.high, c.low)
+		g.StockCandle("candles2", 50, t, c.open, c.clos, c.high, c.low)
 	}
 
 	// g.DrawSmoothLine("candles", listPoints)
