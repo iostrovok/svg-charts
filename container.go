@@ -219,11 +219,11 @@ func (c *container) GetGlobalPoints() {
 }
 
 //
-func (c *container) StockCandle(name string, cWidth int, t time.Time, open, clos, high, low int) error {
+func (c *container) StockCandle(name string, cnd stock.OneCandle) error {
 	w, ok := c.windows[name]
 	if !ok {
 		return fmt.Errorf("window %s not found", name)
 	}
-	stock.Candle(w.Plast, cWidth, t, open, clos, high, low)
+	stock.Candle(w.Plast, cnd)
 	return nil
 }

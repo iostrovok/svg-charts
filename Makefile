@@ -1,6 +1,6 @@
 ROOT := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-GOPATH := ${ROOT}:${GOPATH}
+GOPATH := ${GOPATH}:${ROOT}
 export GOPATH := ${GOPATH}
 
 
