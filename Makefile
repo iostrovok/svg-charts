@@ -40,6 +40,7 @@ reinstall:
 	@go get -u github.com/iostrovok/svg-charts/plast
 	@go get -u github.com/iostrovok/svg-charts/window
 	@go get -u github.com/iostrovok/svg-charts/ext/stock/
+	@go get -u github.com/iostrovok/svg-charts/ext/lines/
 	@go get -u github.com/iostrovok/svg-charts
 
 # Examples

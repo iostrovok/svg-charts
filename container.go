@@ -16,7 +16,7 @@ import (
 	// "github.com/iostrovok/svg-charts/plast"
 	// "github.com/iostrovok/svg-charts/plast"
 
-	"github.com/iostrovok/svg-charts/ext/stock/"
+	"github.com/iostrovok/svg-charts/ext/stock"
 )
 
 type container struct {
