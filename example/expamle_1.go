@@ -8,9 +8,11 @@ import (
 	"time"
 
 	"github.com/iostrovok/svg"
-	"github.com/iostrovok/svg/style"
+	style "github.com/iostrovok/svg/style"
 
 	chart "github.com/iostrovok/svg-charts"
+	colors "github.com/iostrovok/svg-charts/colors"
+	stock "github.com/iostrovok/svg-charts/ext/stock"
 )
 
 type Point struct {
@@ -73,7 +75,7 @@ func testHistogram() []Point {
 func testCandles() []Candle {
 	return []Candle{
 		{x: "2015-02-01 15:00:00", open: 100, clos: 200, high: 250, low: 50},
-		{x: "2015-02-01 15:05:00", open: 100, clos: 200, high: 250, low: 50},
+		{x: "2015-02-01 15:05:00", open: 500, clos: 300, high: 650, low: 50},
 		{x: "2015-02-01 15:10:00", open: 100, clos: 200, high: 250, low: 50},
 		{x: "2015-02-01 15:15:00", open: 100, clos: 200, high: 250, low: 50},
 		{x: "2015-02-01 15:20:00", open: 100, clos: 200, high: 250, low: 50},
@@ -110,10 +112,23 @@ func main() {
 			log.Fatalln(err)
 		}
 
+		cnd := stock.OneCandle{
+			T:        t,
+			Open:     c.open,
+			Close:    c.clos,
+			High:     c.high,
+			Low:      c.low,
+			Width:    50,
+			StBorder: style.Style().StrokeWidth(10).Stroke("black").Ref(),
+			StDown:   style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.LIGHT_GRAY).Ref(),
+			StUp:     style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.GRAY).Ref(),
+			Debug:    true,
+		}
+
 		// fmt.Printf("%s. Open: %d, Close: %d, High: %d, Low: %d\n", c.TimeOpen.Format("2006-01-02 15:04:05"), c.Open(), c.Close(), c.High(), c.Low())
-		g.StockCandle("candles", 50, t, c.open, c.clos, c.high, c.low)
+		g.StockCandle("candles", cnd)
 		// g.Volume("volume", c.TimeOpen, c.Volume())
-		g.StockCandle("candles2", 50, t, c.open, c.clos, c.high, c.low)
+		g.StockCandle("candles2", cnd)
 	}
 
 	// g.DrawSmoothLine("candles", listPoints)

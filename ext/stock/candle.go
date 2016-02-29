@@ -22,6 +22,7 @@ type OneCandle struct {
 	StDown      *style.STYLE
 	StUp        *style.STYLE
 	StBorder    *style.STYLE
+	Debug       bool
 }
 
 type cand struct {
@@ -47,8 +48,15 @@ func Candle(g *plast.Plast, candle OneCandle) error {
 	title := svg.Title(c.text)
 
 	x2 := c.x + c.width/2
+	if candle.Debug {
+		fmt.Printf("x2: %f, g.GetPoint(c.high): %f, x2: %f, g.GetPoint(c.low): %f\n", x2, g.GetPoint(c.high), x2, g.GetPoint(c.low))
+	}
 	highLine := svg.Line(x2, g.GetPoint(c.high), x2, g.GetPoint(c.low), c.stBorder).Append(title)
 	g.G.Append(highLine)
+
+	if candle.Debug {
+		fmt.Printf("c.x: %f, g.GetPoint(c.clos): %f, c.width: %f, math.Abs(c.clos-c.open): %f\n", c.x, g.GetPoint(c.clos), c.width, math.Abs(c.clos-c.open))
+	}
 
 	resc := svg.Rect(c.x, g.GetPoint(c.clos), c.width, math.Abs(c.clos-c.open), c.st).Append(title)
 	g.G.Append(resc)
@@ -86,7 +94,7 @@ func candlePrepare(candle OneCandle, converter *converter.Converter) (*cand, err
 	}
 
 	c.text = candle.Text
-	if candle.Text == "" {
+	if c.text == "" {
 		c.text = fmt.Sprintf("%s\nOpen: %d\nClose: %d\nHigh: %d\nLow: %d", candle.T.Format("2006-01-02 15:04:05"), candle.Open, candle.Close, candle.High, candle.Low)
 	}
 
