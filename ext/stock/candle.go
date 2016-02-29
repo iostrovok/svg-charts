@@ -51,7 +51,7 @@ func Candle(g *plast.Plast, candle OneCandle) error {
 	if candle.Debug {
 		fmt.Printf("x2: %f, g.GetPoint(c.high): %f, x2: %f, g.GetPoint(c.low): %f\n", x2, g.GetPoint(c.high), x2, g.GetPoint(c.low))
 	}
-	highLine := svg.Line(x2, g.GetPoint(c.high), x2, g.GetPoint(c.low), c.stBorder).Append(title)
+	highLine := svg.Line(x2, g.GetPoint(c.high), x2, g.GetPoint(c.low), c.stBorder)
 	g.G.Append(highLine)
 
 	if candle.Debug {
