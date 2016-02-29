@@ -16,8 +16,9 @@ import (
 type OneCandle struct {
 	T           time.Time
 	Text        string
-	Open, Close float64
-	High, Low   float64
+	Open, Close int
+	High, Low   int
+	Width       int
 	StDown      *style.STYLE
 	StUp        *style.STYLE
 	StBorder    *style.STYLE
@@ -29,11 +30,12 @@ type cand struct {
 	open, clos float64
 	high, low  float64
 	color      string
+	width      float64
 	st         style.STYLE
 	stBorder   style.STYLE
 }
 
-func Candle(g *plast.Plast, cWidth int, candle OneCandle) error {
+func Candle(g *plast.Plast, candle OneCandle) error {
 
 	converter := g.Converter()
 
@@ -44,11 +46,11 @@ func Candle(g *plast.Plast, cWidth int, candle OneCandle) error {
 
 	title := svg.Title(c.text)
 
-	x2 := c.x + float64(cWidth)/2
+	x2 := c.x + c.width/2
 	highLine := svg.Line(x2, g.GetPoint(c.high), x2, g.GetPoint(c.low), c.stBorder).Append(title)
 	g.G.Append(highLine)
 
-	resc := svg.Rect(c.x, g.GetPoint(c.clos), float64(cWidth), math.Abs(c.clos-c.open), c.st).Append(title)
+	resc := svg.Rect(c.x, g.GetPoint(c.clos), c.width, math.Abs(c.clos-c.open), c.st).Append(title)
 	g.G.Append(resc)
 
 	return nil
@@ -92,6 +94,12 @@ func candlePrepare(candle OneCandle, converter *converter.Converter) (*cand, err
 		c.st = style.Style().StrokeWidth(0.5).Stroke("black")
 	} else {
 		c.st = *candle.StBorder
+	}
+
+	if candle.Width > 0 {
+		c.width = float64(candle.Width)
+	} else {
+		c.width = 5.0
 	}
 
 	c.color = colors.GREEN

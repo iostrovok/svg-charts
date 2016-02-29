@@ -43,9 +43,10 @@ func (s StockTestsSuite) Test_Candle(c *C) {
 		Close: 400,
 		High:  100,
 		Low:   300,
+		Width: 5,
 	}
 
-	err := Candle(p, 5, cnd)
+	err := Candle(p, cnd)
 	c.Assert(err, IsNil)
 }
 
@@ -76,6 +77,6 @@ func (s StockTestsSuite) Test_Candle_2(c *C) {
 		StBorder: &st,
 	}
 
-	err := Candle(p, 5, cnd)
+	err := Candle(p, cnd)
 	c.Assert(err, IsNil)
 }
