@@ -99,9 +99,9 @@ func candlePrepare(candle OneCandle, converter *converter.Converter) (*cand, err
 	}
 
 	if candle.StBorder == nil {
-		c.st = style.Style().StrokeWidth(0.5).Stroke("black")
+		c.stBorder = style.Style().StrokeWidth(0.5).Stroke("black")
 	} else {
-		c.st = *candle.StBorder
+		c.stBorder = *candle.StBorder
 	}
 
 	if candle.Width > 0 {

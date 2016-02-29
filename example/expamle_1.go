@@ -119,7 +119,7 @@ func main() {
 			High:     c.high,
 			Low:      c.low,
 			Width:    50,
-			StBorder: style.Style().StrokeWidth(10).Stroke("black").Ref(),
+			StBorder: style.Style().StrokeWidth(10).Stroke("black").Fill("none").Ref(),
 			StDown:   style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.LIGHT_GRAY).Ref(),
 			StUp:     style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.GRAY).Ref(),
 			Debug:    true,
