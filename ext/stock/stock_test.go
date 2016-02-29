@@ -36,7 +36,7 @@ func (s StockTestsSuite) Test_ints(c *C) {
 	c.Assert(p, NotNil)
 
 	t := _stock_time_test(c, "2015-02-01 15:30:00")
-	err := Candle(p, t, 5, 100, 200, 300, 400)
+	err := Candle(p, 5, t, 100, 200, 300, 400)
 	c.Assert(err, IsNil)
 
 }

@@ -21,7 +21,7 @@ type cand struct {
 	color      string
 }
 
-func Candle(g *plast.Plast, t time.Time, cWidth, open, clos, high, low int) error {
+func Candle(g *plast.Plast, cWidth int, t time.Time, open, clos, high, low int) error {
 
 	converter := g.Converter()
 

@@ -20,12 +20,12 @@ type Point struct {
 
 type Candle struct {
 	x          string
-	open, clos float64
-	high, low  float64
+	open, clos int
+	high, low  int
 }
 
 const (
-	WIDTH = 6200
+	WIDTH = 1200
 	HIGH  = 650
 
 	candleWidth     = 6
@@ -82,6 +82,7 @@ func testCandles() []Candle {
 		{x: "2015-02-01 15:00:00", open: 100, clos: 100, high: 200, low: 100},
 		{x: "2015-02-01 15:05:00", open: 100, clos: 100, high: 200, low: 100},
 		{x: "2015-02-01 15:10:00", open: 100, clos: 100, high: 200, low: 100},
+		{x: "2015-02-01 15:15:00", open: 100, clos: 100, high: 200, low: 100},
 		{x: "2015-02-01 15:20:00", open: 100, clos: 100, high: 200, low: 100},
 		{x: "2015-02-01 15:25:00", open: 100, clos: 100, high: 200, low: 100},
 		{x: "2015-02-01 15:30:00", open: 100, clos: 100, high: 200, low: 100},
@@ -109,17 +110,17 @@ func main() {
 	g.Move(10, 10)
 
 	listCandle := testCandles()
-	for i, c := range listCandle {
+	for _, c := range listCandle {
 
-		t1, err := time.Parse("2006-01-02 15:04:05", c.x)
+		t, err := time.Parse("2006-01-02 15:04:05", c.x)
 		if err != nil {
 			log.Fatalln(err)
 		}
 
 		// fmt.Printf("%s. Open: %d, Close: %d, High: %d, Low: %d\n", c.TimeOpen.Format("2006-01-02 15:04:05"), c.Open(), c.Close(), c.High(), c.Low())
-		g.Candle("candles", t, c.open, c.clos, c.high, c.low)
+		g.StockCandle("candles", t, 50, c.open, c.clos, c.high, c.low)
 		// g.Volume("volume", c.TimeOpen, c.Volume())
-		g.Candle("candles2", t, c.open, c.clos, c.high, c.low)
+		g.StockCandle("candles2", t, 50, c.open, c.clos, c.high, c.low)
 	}
 
 	// g.DrawSmoothLine("candles", listPoints)
