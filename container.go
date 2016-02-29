@@ -15,7 +15,7 @@ import (
 	"github.com/iostrovok/svg-charts/window"
 	// "github.com/iostrovok/svg-charts/plast"
 	// "github.com/iostrovok/svg-charts/plast"
-	// stock "github.com/iostrovok/svg-charts/ext/stock"
+	stock "github.com/iostrovok/svg-charts/ext/stock"
 )
 
 type container struct {
@@ -222,7 +222,7 @@ func (c *container) GetGlobalPoints() {
 }
 
 //
-func (c *container) Candle(name string, t time.Time, cWidth, open, clos, high, low int) error {
+func (c *container) StockCandle(name string, t time.Time, cWidth, open, clos, high, low int) error {
 	w, ok := c.windows[name]
 	if !ok {
 		return fmt.Errorf("window %s not found", name)
