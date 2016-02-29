@@ -112,7 +112,7 @@ func candlePrepare(candle OneCandle, converter *converter.Converter) (*cand, err
 		}
 	} else {
 		if candle.StUp == nil {
-			c.st = style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.RED)
+			c.st = style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.GREEN)
 		} else {
 			c.st = *candle.StUp
 		}
