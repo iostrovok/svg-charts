@@ -13,72 +13,101 @@ import (
 	"github.com/iostrovok/svg-charts/plast"
 )
 
+type OneCandle struct {
+	T           time.Time
+	Text        string
+	Open, Close float64
+	High, Low   float64
+	StDown      *style.STYLE
+	StUp        *style.STYLE
+	StBorder    *style.STYLE
+}
+
 type cand struct {
 	x          float64
 	text       string
 	open, clos float64
 	high, low  float64
 	color      string
+	st         style.STYLE
+	stBorder   style.STYLE
 }
 
-func Candle(g *plast.Plast, cWidth int, t time.Time, open, clos, high, low int) error {
+func Candle(g *plast.Plast, cWidth int, candle OneCandle) error {
 
 	converter := g.Converter()
 
-	c, err := candlePrepare(t, open, clos, high, low, converter)
+	c, err := candlePrepare(candle, converter)
 	if err != nil {
 		return err
 	}
 
 	title := svg.Title(c.text)
 
-	st := style.Style().StrokeWidth(0.5).Stroke("black")
 	x2 := c.x + float64(cWidth)/2
-	highLine := svg.Line(x2, g.GetPoint(c.high), x2, g.GetPoint(c.low), st).Append(title)
+	highLine := svg.Line(x2, g.GetPoint(c.high), x2, g.GetPoint(c.low), c.stBorder).Append(title)
 	g.G.Append(highLine)
 
-	st2 := style.Style().StrokeWidth(0.5).Stroke("black").Fill(c.color)
-	resc := svg.Rect(c.x, g.GetPoint(c.clos), float64(cWidth), math.Abs(c.clos-c.open), st2).Append(title)
+	resc := svg.Rect(c.x, g.GetPoint(c.clos), float64(cWidth), math.Abs(c.clos-c.open), c.st).Append(title)
 	g.G.Append(resc)
 
 	return nil
 }
 
-func candlePrepare(t time.Time, open, clos, high, low int, converter *converter.Converter) (*cand, error) {
+func candlePrepare(candle OneCandle, converter *converter.Converter) (*cand, error) {
 
 	c := &cand{}
 	var err error
 
-	c.x, err = converter.GetTimeX(t)
+	c.x, err = converter.GetTimeX(candle.T)
 	if err != nil {
 		return nil, err
 	}
 
-	c.clos, err = converter.GetY(float64(clos))
+	c.clos, err = converter.GetY(float64(candle.Close))
 	if err != nil {
 		return nil, err
 	}
-	c.open, err = converter.GetY(float64(open))
-	if err != nil {
-		return nil, err
-	}
-
-	c.high, err = converter.GetY(float64(high))
+	c.open, err = converter.GetY(float64(candle.Open))
 	if err != nil {
 		return nil, err
 	}
 
-	c.low, err = converter.GetY(float64(low))
+	c.high, err = converter.GetY(float64(candle.High))
 	if err != nil {
 		return nil, err
 	}
 
-	c.text = fmt.Sprintf("%s\nOpen: %d\nClose: %d\nHigh: %d\nLow: %d", t.Format("2006-01-02 15:04:05"), open, clos, high, low)
+	c.low, err = converter.GetY(float64(candle.Low))
+	if err != nil {
+		return nil, err
+	}
+
+	c.text = candle.Text
+	if candle.Text == "" {
+		c.text = fmt.Sprintf("%s\nOpen: %d\nClose: %d\nHigh: %d\nLow: %d", candle.T.Format("2006-01-02 15:04:05"), candle.Open, candle.Close, candle.High, candle.Low)
+	}
+
+	if candle.StBorder == nil {
+		c.st = style.Style().StrokeWidth(0.5).Stroke("black")
+	} else {
+		c.st = *candle.StBorder
+	}
 
 	c.color = colors.GREEN
-	if open > clos {
-		c.color = colors.RED
+	if candle.Open > candle.Close {
 		c.clos, c.open = c.open, c.clos
+		if candle.StDown == nil {
+			c.st = style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.RED)
+		} else {
+			c.st = *candle.StDown
+		}
+	} else {
+		if candle.StUp == nil {
+			c.st = style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.RED)
+		} else {
+			c.st = *candle.StUp
+		}
 	}
 
 	return c, nil

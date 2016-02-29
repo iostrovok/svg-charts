@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/iostrovok/svg-charts/plast"
+	"github.com/iostrovok/svg/style"
 )
 
 func TestStock(t *testing.T) {
@@ -22,7 +23,7 @@ func _stock_time_test(c *C, str string) time.Time {
 	return t0
 }
 
-func (s StockTestsSuite) Test_ints(c *C) {
+func (s StockTestsSuite) Test_Candle(c *C) {
 	// c.Skip("Not now")
 
 	timeLeft := _stock_time_test(c, "2015-02-01 15:00:00")
@@ -36,7 +37,45 @@ func (s StockTestsSuite) Test_ints(c *C) {
 	c.Assert(p, NotNil)
 
 	t := _stock_time_test(c, "2015-02-01 15:30:00")
-	err := Candle(p, 5, t, 100, 200, 300, 400)
-	c.Assert(err, IsNil)
+	cnd := OneCandle{
+		T:     t,
+		Open:  300,
+		Close: 400,
+		High:  100,
+		Low:   300,
+	}
 
+	err := Candle(p, 5, cnd)
+	c.Assert(err, IsNil)
+}
+
+func (s StockTestsSuite) Test_Candle_2(c *C) {
+	// c.Skip("Not now")
+
+	timeLeft := _stock_time_test(c, "2015-02-01 15:00:00")
+	timeRight := _stock_time_test(c, "2015-02-01 16:00:00")
+	realYBottom := 10.0
+	realYTop := 900.0
+	width := 800.0
+	hight := 400.0
+
+	p := plast.New(realYBottom, realYTop, width, hight, timeLeft, timeRight)
+	c.Assert(p, NotNil)
+
+	st := style.Style().StrokeWidth(0.5).Stroke("black").Fill("RED")
+	t := _stock_time_test(c, "2015-02-01 15:30:00")
+	cnd := OneCandle{
+		T:        t,
+		Text:     "My TEST",
+		Open:     300,
+		Close:    400,
+		High:     100,
+		Low:      300,
+		StDown:   &st,
+		StUp:     &st,
+		StBorder: &st,
+	}
+
+	err := Candle(p, 5, cnd)
+	c.Assert(err, IsNil)
 }
