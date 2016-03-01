@@ -19,7 +19,13 @@ type OneVolume struct {
 	Debug bool
 }
 
-func Volume(g *plast.Plast, vol OneVolume) error {
+func Volume(g *plast.Plast, vol OneVolume) (err error) {
+
+	defer func() {
+		if err != nil && vol.Debug {
+			fmt.Printf("ERROR: %s\n", err)
+		}
+	}()
 
 	if vol.Debug {
 		fmt.Printf("vol.T: %s, vol.T: %d, vol.T: %d, vol.Width: %d\n", vol.T.Format("2006-01-02 15:04:05"), vol.T, vol.T, vol.Width)
