@@ -23,6 +23,29 @@ func _stock_time_test(c *C, str string) time.Time {
 	return t0
 }
 
+func (s StockTestsSuite) Test_Volume(c *C) {
+	// c.Skip("Not now")
+
+	timeLeft := _stock_time_test(c, "2015-02-01 15:00:00")
+	timeRight := _stock_time_test(c, "2015-02-01 16:00:00")
+	realYBottom := 10.0
+	realYTop := 900.0
+	width := 800.0
+	hight := 400.0
+
+	p := plast.New(realYBottom, realYTop, width, hight, timeLeft, timeRight)
+	c.Assert(p, NotNil)
+
+	t := _stock_time_test(c, "2015-02-01 15:30:00")
+	cnd := OneVolume{
+		T: t,
+		Y: 300,
+	}
+
+	err := Volume(p, cnd)
+	c.Assert(err, IsNil)
+}
+
 func (s StockTestsSuite) Test_Candle(c *C) {
 	// c.Skip("Not now")
 

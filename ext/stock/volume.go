@@ -10,30 +10,48 @@ import (
 	"github.com/iostrovok/svg/style"
 )
 
-func Volume(g *plast.Plast, x time.Time, cWidth, volume int) error {
+type OneVolume struct {
+	T     time.Time
+	Text  string
+	Y     int
+	Width int
+	St    *style.STYLE
+	Debug bool
+}
+
+func Volume(g *plast.Plast, vol OneVolume) error {
 
 	converter := g.Converter()
 
-	x1, err := converter.GetTimeX(x)
+	x1, err := converter.GetTimeX(vol.T)
 	if err != nil {
 		return err
 	}
 
-	volumeV, err := converter.GetY(float64(volume))
+	volumeV, err := converter.GetY(float64(vol.Y))
 	if err != nil {
 		return err
 	}
 
-	text := fmt.Sprintf("%s\nvolume: %d", x.Format("2006-01-02 15:04:05"), volume)
+	width := float64(vol.Width)
+	if vol.Width == 0 {
+		width = 5
+	}
 
-	color := colors.GREEN
-	if volumeV > 5000.0 {
-		color = colors.RED
+	text := vol.Text
+	if vol.Text == "" {
+		text = fmt.Sprintf("%s\nvolume: %d", vol.T.Format("2006-01-02 15:04:05"), vol.Y)
+	}
+
+	var st style.STYLE
+	if vol.St == nil {
+		st = style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.GREEN)
+	} else {
+		st = *vol.St
 	}
 
 	title := svg.Title(text)
-	st2 := style.Style().StrokeWidth(0.5).Stroke(colors.BLACK).Fill(color)
-	resc := svg.Rect(x1, g.GetPoint(volumeV), float64(cWidth), float64(volume), st2).Append(title)
+	resc := svg.Rect(x1, g.GetPoint(volumeV), width, float64(vol.Y), st).Append(title)
 	g.G.Append(resc)
 
 	return nil
