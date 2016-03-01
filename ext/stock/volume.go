@@ -21,6 +21,10 @@ type OneVolume struct {
 
 func Volume(g *plast.Plast, vol OneVolume) error {
 
+	if vol.Debug {
+		fmt.Printf("vol.T: %s, vol.T: %d, vol.T: %d, vol.Width: %d\n", vol.T.Format("2006-01-02 15:04:05"), vol.T, vol.T, vol.Width)
+	}
+
 	converter := g.Converter()
 
 	x1, err := converter.GetTimeX(vol.T)
@@ -48,6 +52,10 @@ func Volume(g *plast.Plast, vol OneVolume) error {
 		st = style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.GREEN)
 	} else {
 		st = *vol.St
+	}
+
+	if vol.Debug {
+		fmt.Printf("x1: %d, g.GetPoint(volumeV): %f, volumeV: %f, width: %f\n", x1, g.GetPoint(volumeV), volumeV, width)
 	}
 
 	title := svg.Title(text)
