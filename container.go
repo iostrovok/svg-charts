@@ -219,6 +219,16 @@ func (c *container) GetGlobalPoints() {
 }
 
 //
+func (c *container) Volume(name string, vol stock.OneVolume) error {
+	w, ok := c.windows[name]
+	if !ok {
+		return fmt.Errorf("window %s not found", name)
+	}
+	stock.Volume(w.Plast, vol)
+	return nil
+}
+
+//
 func (c *container) StockCandle(name string, cnd stock.OneCandle) error {
 	w, ok := c.windows[name]
 	if !ok {
