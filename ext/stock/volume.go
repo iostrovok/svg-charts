@@ -51,7 +51,7 @@ func Volume(g *plast.Plast, vol OneVolume) error {
 	}
 
 	title := svg.Title(text)
-	resc := svg.Rect(x1, g.GetPoint(volumeV), width, float64(vol.Y), st).Append(title)
+	resc := svg.Rect(x1, g.GetPoint(volumeV), width, float64(volumeV), st).Append(title)
 	g.G.Append(resc)
 
 	return nil
