@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/iostrovok/svg-charts/plast"
+	"github.com/iostrovok/svg-charts/points"
 )
 
 func TestLines(t *testing.T) {
@@ -55,7 +56,7 @@ func (s LinesTestsSuite) Test_Smooth(c *C) {
 	p := plast.New(realYBottom, realYTop, width, hight, timeLeft, timeRight)
 	c.Assert(p, NotNil)
 
-	list := []plast.Point{}
-	err := Smooth(p, 1, list)
+	list := []points.PointTime{}
+	err := SmoothByTime(p, list)
 	c.Assert(err, IsNil)
 }

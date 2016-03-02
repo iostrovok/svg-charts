@@ -106,7 +106,8 @@ func main() {
 	g.Init()
 	g.Move(10, 10)
 
-	listPoints := []points.PointTime{}
+	listHigh := []points.PointTime{}
+	listClose := []points.PointTime{}
 
 	listCandle := testCandles()
 	for _, c := range listCandle {
@@ -132,11 +133,16 @@ func main() {
 		g.StockCandle("candles", cnd)
 		g.StockCandle("candles2", cnd)
 
-		listPoints = append(listPoints, points.PointTime{
-			Y: float64(c.high),
-			X: t,
-
+		listHigh = append(listHigh, points.PointTime{
+			Y:    float64(c.high),
+			X:    t,
 			DisX: float64(candleWidth) / 2,
+		})
+
+		listClose = append(listClose, points.PointTime{
+			Y:    float64(c.clos),
+			X:    t,
+			DisX: float64(candleWidth),
 		})
 	}
 
@@ -158,8 +164,9 @@ func main() {
 		g.Volume("volume", vol)
 	}
 
-	g.SmoothByTime("candles", listPoints)
-	// g.DrawSmoothLine("candles2", listPoints)
+	stLine := style.Style().StrokeWidth(2.5).Stroke(colors.RED).Fill("none")
+	g.SmoothByTime("candles", listHigh)
+	g.SmoothByTime("candles2", listClose, stLine)
 
 	canvas := svg.New(WIDTH, HIGH)
 	Border(canvas)

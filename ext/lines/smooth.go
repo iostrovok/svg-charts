@@ -9,9 +9,17 @@ import (
 	"github.com/iostrovok/svg-charts/points"
 )
 
-func SmoothByTime(g *plast.Plast, list []points.PointTime) error {
+func _style(st ...style.STYLE) style.STYLE {
+	if len(st) > 0 {
+		return st[0]
+	}
 
-	st := style.Style().StrokeWidth(0.5).Stroke(colors.RED).Fill("none")
+	return style.Style().StrokeWidth(0.5).Stroke(colors.RED).Fill("none")
+}
+
+func SmoothByTime(g *plast.Plast, list []points.PointTime, sts ...style.STYLE) error {
+
+	st := _style(sts...)
 
 	converter := g.Converter()
 

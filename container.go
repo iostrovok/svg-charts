@@ -218,13 +218,13 @@ func (c *container) GetGlobalPoints() {
 	}
 }
 
-func (c *container) SmoothByTime(name string, list []points.PointTime) error {
+func (c *container) SmoothByTime(name string, list []points.PointTime, sts ...style.STYLE) error {
 	w, ok := c.windows[name]
 	if !ok {
 		return fmt.Errorf("window %s not found", name)
 	}
 
-	lines.SmoothByTime(w.Plast, list)
+	lines.SmoothByTime(w.Plast, list, sts...)
 	return nil
 }
 
