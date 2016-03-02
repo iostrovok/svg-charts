@@ -34,6 +34,7 @@ test-ext-lines:
 # reinstall
 reinstall:
 	@git push
+	@go get -u github.com/iostrovok/svg-charts/points
 	@go get -u github.com/iostrovok/svg-charts/colors
 	@go get -u github.com/iostrovok/svg-charts/grid
 	@go get -u github.com/iostrovok/svg-charts/converter

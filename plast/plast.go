@@ -6,16 +6,12 @@ import (
 	"github.com/iostrovok/svg-charts/colors"
 	"github.com/iostrovok/svg-charts/converter"
 	"github.com/iostrovok/svg-charts/grid"
+	"github.com/iostrovok/svg-charts/points"
 
 	"github.com/iostrovok/svg"
 	"github.com/iostrovok/svg/style"
 	"github.com/iostrovok/svg/transform"
 )
-
-type Point struct {
-	Y int
-	X time.Time
-}
 
 type Plast struct {
 	G *svg.GROUP
@@ -26,8 +22,8 @@ type Plast struct {
 
 	realTimeLeft, realTimeRight time.Time
 
-	_gridListX []grid.PointTime
-	_gridListY []grid.PointNum
+	_gridListX []points.GridPointTime
+	_gridListY []points.GridPointNum
 
 	converter *converter.Converter
 }
@@ -92,10 +88,10 @@ func (g *Plast) Border() {
 	g.G.Append(rec2)
 }
 
-func (g *Plast) GridListX() []grid.PointTime {
+func (g *Plast) GridListX() []points.GridPointTime {
 	return g._gridListX
 }
-func (g *Plast) GridListY() []grid.PointNum {
+func (g *Plast) GridListY() []points.GridPointNum {
 	return g._gridListY
 }
 

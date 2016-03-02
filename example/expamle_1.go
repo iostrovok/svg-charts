@@ -13,11 +13,12 @@ import (
 	chart "github.com/iostrovok/svg-charts"
 	colors "github.com/iostrovok/svg-charts/colors"
 	stock "github.com/iostrovok/svg-charts/ext/stock"
+	points "github.com/iostrovok/svg-charts/points"
 )
 
 type Point struct {
 	x string
-	y float64
+	y int
 }
 
 type Candle struct {
@@ -30,7 +31,7 @@ const (
 	WIDTH = 1300
 	HIGH  = 650
 
-	candleWidth     = 6
+	candleWidth     = 50
 	betweenCandle   = 8
 	fieldSpaceHigh  = 30
 	fieldSpaceWidth = 30
@@ -59,15 +60,16 @@ func testHistogram() []Point {
 
 	return []Point{
 		{x: "2015-02-01 15:00:00", y: 100},
-		{x: "2015-02-01 15:05:00", y: 444},
-		{x: "2015-02-01 15:10:00", y: 678},
-		{x: "2015-02-01 15:20:00", y: 1000},
-		{x: "2015-02-01 15:25:00", y: 787},
-		{x: "2015-02-01 15:30:00", y: 909},
-		{x: "2015-02-01 15:35:00", y: 1000},
-		{x: "2015-02-01 15:40:00", y: 567},
-		{x: "2015-02-01 15:45:00", y: 456},
-		{x: "2015-02-01 15:50:00", y: 123},
+		{x: "2015-02-01 15:05:00", y: 120},
+		{x: "2015-02-01 15:10:00", y: 67},
+		{x: "2015-02-01 15:15:00", y: 200},
+		{x: "2015-02-01 15:20:00", y: 100},
+		{x: "2015-02-01 15:25:00", y: 87},
+		{x: "2015-02-01 15:30:00", y: 90},
+		{x: "2015-02-01 15:35:00", y: 100},
+		{x: "2015-02-01 15:40:00", y: 56},
+		{x: "2015-02-01 15:45:00", y: 45},
+		{x: "2015-02-01 15:50:00", y: 13},
 		{x: "2015-02-01 15:55:00", y: 12},
 	}
 }
@@ -100,9 +102,11 @@ func main() {
 
 	g.Window("candles", 1+2+4+8, realYBottom, realYTop, 50.0, realTimeLeft, realTimeRight)
 	g.Window("candles2", 1+2+4+8, realYBottom, realYTop, 25.0, realTimeLeft, realTimeRight)
-	g.Window("volume", 1+2+4+8, 0, realTopVolume, 25.0, realTimeLeft, realTimeRight)
+	g.Window("volume", 1+2+8, 0, realTopVolume, 25.0, realTimeLeft, realTimeRight)
 	g.Init()
 	g.Move(10, 10)
+
+	listPoints := []points.PointTime{}
 
 	listCandle := testCandles()
 	for _, c := range listCandle {
@@ -118,20 +122,43 @@ func main() {
 			Close:    c.clos,
 			High:     c.high,
 			Low:      c.low,
-			Width:    50,
-			StBorder: style.Style().StrokeWidth(10).Stroke("black").Fill("none").Ref(),
+			Width:    candleWidth,
+			StBorder: style.Style().StrokeWidth(2).Stroke("black").Fill("none").Ref(),
 			StDown:   style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.LIGHT_GRAY).Ref(),
 			StUp:     style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.GRAY).Ref(),
-			Debug:    true,
+			Debug:    false,
 		}
 
-		// fmt.Printf("%s. Open: %d, Close: %d, High: %d, Low: %d\n", c.TimeOpen.Format("2006-01-02 15:04:05"), c.Open(), c.Close(), c.High(), c.Low())
 		g.StockCandle("candles", cnd)
-		// g.Volume("volume", c.TimeOpen, c.Volume())
 		g.StockCandle("candles2", cnd)
+
+		listPoints = append(listPoints, points.PointTime{
+			Y: float64(c.high),
+			X: t,
+
+			DisX: float64(candleWidth) / 2,
+		})
 	}
 
-	// g.DrawSmoothLine("candles", listPoints)
+	volumeCandle := testHistogram()
+	for _, c := range volumeCandle {
+
+		t, err := time.Parse("2006-01-02 15:04:05", c.x)
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		vol := stock.OneVolume{
+			T:     t,
+			Y:     c.y,
+			Width: 50,
+			St:    style.Style().StrokeWidth(0.5).Stroke("black").Fill(colors.GREEN).Ref(),
+			Debug: true,
+		}
+		g.Volume("volume", vol)
+	}
+
+	g.SmoothByTime("candles", listPoints)
 	// g.DrawSmoothLine("candles2", listPoints)
 
 	canvas := svg.New(WIDTH, HIGH)

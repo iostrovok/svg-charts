@@ -3,6 +3,8 @@ package grid
 import (
 	"math"
 	"time"
+
+	"github.com/iostrovok/svg-charts/points"
 )
 
 var roundInt []int = []int{
@@ -36,21 +38,12 @@ var roundTime []time.Duration = []time.Duration{
 	365 * 24 * time.Hour,
 }
 
-type PointTime struct {
-	PosDraw float64
-	PosTime time.Time
-}
-
-type PointNum struct {
-	PosDraw, PosReal float64
-}
-
 func GridByTime(
 	startTimeX, finishTimeX time.Time,
 	startY, finishY,
 	countPerX, countPerY,
 	width, hight int,
-) ([]PointTime, []PointNum) {
+) ([]points.GridPointTime, []points.GridPointNum) {
 	listY := GetLineGridPoints(startY, finishY, hight, countPerY)
 	listX := GetTimeGridPoints(startTimeX, finishTimeX, width, countPerX)
 	return listX, listY
@@ -70,20 +63,20 @@ func findBestGridIntPoint(d int) int {
 	return 1
 }
 
-func GetLineGridPoints(from, to, lenSide, gridCount int) []PointNum {
+func GetLineGridPoints(from, to, lenSide, gridCount int) []points.GridPointNum {
 
 	fullD := to - from
 	d := fullD / gridCount
 	step := findBestGridIntPoint(d)
 
 	startPoint := step * int(math.Floor(float64(from)/float64(step)))
-	out := []PointNum{}
+	out := []points.GridPointNum{}
 	for startPoint < to {
 
 		x := int(float64(lenSide) * float64(startPoint-from) / float64(fullD))
 
 		if 0 < x && x < lenSide {
-			out = append(out, PointNum{
+			out = append(out, points.GridPointNum{
 				PosDraw: float64(lenSide - x),
 				PosReal: float64(startPoint),
 			})
@@ -102,19 +95,19 @@ func findBestGridTimePoint(d time.Duration) time.Duration {
 	return roundTime[1]
 }
 
-func GetTimeGridPoints(t0, t1 time.Time, lenSide, gridCount int) []PointTime {
+func GetTimeGridPoints(t0, t1 time.Time, lenSide, gridCount int) []points.GridPointTime {
 
 	fullD := t1.Sub(t0)
 	d := findBestGridTimePoint(t1.Sub(t0) / time.Duration(gridCount))
 
 	startPoint := t0.Add(time.Duration(float64(d) / 1.8)).Round(d)
-	out := []PointTime{}
+	out := []points.GridPointTime{}
 	for startPoint.Before(t1) {
 
 		l := startPoint.Sub(t0)
 
 		x := float64(lenSide) * float64(l) / float64(fullD)
-		out = append(out, PointTime{
+		out = append(out, points.GridPointTime{
 			PosDraw: x,
 			PosTime: t0.Add(l),
 		})

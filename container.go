@@ -11,17 +11,17 @@ import (
 	"github.com/iostrovok/svg/transform"
 
 	"github.com/iostrovok/svg-charts/colors"
-	"github.com/iostrovok/svg-charts/grid"
+	"github.com/iostrovok/svg-charts/points"
 	"github.com/iostrovok/svg-charts/window"
-	// "github.com/iostrovok/svg-charts/plast"
-	// "github.com/iostrovok/svg-charts/plast"
+
+	lines "github.com/iostrovok/svg-charts/ext/lines"
 	stock "github.com/iostrovok/svg-charts/ext/stock"
 )
 
 type container struct {
 	G *svg.GROUP
 
-	GridListX []grid.PointTime
+	GridListX []points.PointTime
 
 	width, hight float64
 	winGap       float64
@@ -216,6 +216,16 @@ func (c *container) GetGlobalPoints() {
 
 		fmt.Printf("%d [%s]: GetGlobalPoints -> w.startTop: %f\n", i, name, w.StartTop())
 	}
+}
+
+func (c *container) SmoothByTime(name string, list []points.PointTime) error {
+	w, ok := c.windows[name]
+	if !ok {
+		return fmt.Errorf("window %s not found", name)
+	}
+
+	lines.SmoothByTime(w.Plast, list)
+	return nil
 }
 
 //

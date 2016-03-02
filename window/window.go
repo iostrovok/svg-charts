@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/iostrovok/svg-charts/grid"
 	"github.com/iostrovok/svg-charts/plast"
+	"github.com/iostrovok/svg-charts/points"
 )
 
 type Window struct {
@@ -73,11 +73,11 @@ func (w *Window) StartTop(t ...float64) float64 {
 	return w.startTop
 }
 
-func (w *Window) GridListX() []grid.PointTime {
+func (w *Window) GridListX() []points.GridPointTime {
 	return w.Plast.GridListX()
 }
 
-func (w *Window) GridListY() []grid.PointNum {
+func (w *Window) GridListY() []points.GridPointNum {
 	return w.Plast.GridListY()
 }
 

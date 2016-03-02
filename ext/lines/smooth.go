@@ -6,9 +6,10 @@ import (
 
 	"github.com/iostrovok/svg-charts/colors"
 	"github.com/iostrovok/svg-charts/plast"
+	"github.com/iostrovok/svg-charts/points"
 )
 
-func Smooth(g *plast.Plast, width int, list []plast.Point) error {
+func SmoothByTime(g *plast.Plast, list []points.PointTime) error {
 
 	st := style.Style().StrokeWidth(0.5).Stroke(colors.RED).Fill("none")
 
@@ -22,8 +23,8 @@ func Smooth(g *plast.Plast, width int, list []plast.Point) error {
 			return err
 		}
 
-		outX += float64(width) / 2
-		outY = g.GetPoint(outY)
+		outX += p.DisX
+		outY = g.GetPoint(outY + p.DisY)
 
 		if i == 0 {
 			line = line.M(outX, outY)
