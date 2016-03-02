@@ -2,8 +2,6 @@ package svgcharts
 
 import (
 	"fmt"
-	// "strconv"
-	// "strings"
 	"time"
 
 	"github.com/iostrovok/svg"
@@ -16,6 +14,13 @@ import (
 
 	lines "github.com/iostrovok/svg-charts/ext/lines"
 	stock "github.com/iostrovok/svg-charts/ext/stock"
+)
+
+const (
+	LeftSpace   = 1
+	TopSpace    = 2
+	RightSpace  = 4
+	BottomSpace = 8
 )
 
 type container struct {
@@ -68,26 +73,22 @@ func (c *container) Window(name string, space int, realYBottom, realYTop int, pe
 	deltaD := time.Duration(int(float64(d) / 100.0))
 
 	realTimeLeft := realTimeLeftIn
-	if space&1 == 1 {
+	if space&LeftSpace == LeftSpace {
 		realTimeLeft = realTimeLeft.Add(-1 * deltaD)
 	}
 
 	realTimeRight := realTimeRightIn
-	if space&2 == 2 {
+	if space&RightSpace == RightSpace {
 		realTimeRight = realTimeRight.Add(deltaD)
 	}
 
 	realYBottomAdd := float64(realYBottom)
-	fmt.Printf("----> space&4: %d\n", space&4)
-	if space&4 == 4 {
+	if space&BottomSpace == BottomSpace {
 		realYBottomAdd -= float64(realYTop-realYBottom) / 10.0
 	}
 
-	fmt.Printf("----> realYBottom: %d\n", realYBottom)
-	fmt.Printf("----> realYBottomAdd: %f\n", realYBottomAdd)
-
 	realYTopAdd := float64(realYTop)
-	if space&8 == 8 {
+	if space&TopSpace == TopSpace {
 		realYTopAdd += float64(realYTop-realYBottom) / 10.0
 	}
 
@@ -203,7 +204,7 @@ func (c *container) GetGlobalPoints() {
 
 	h := c.hight - c.topField - c.bottomField - float64(len(c.windows_id)-1)*c.winGap
 	startTop := float64(c.topField)
-	for i, name := range c.windows_id {
+	for _, name := range c.windows_id {
 
 		w := c.windows[name]
 
@@ -213,8 +214,6 @@ func (c *container) GetGlobalPoints() {
 		w.StartTop(startTop)
 
 		startTop += float64(w.Hight()) + c.winGap
-
-		fmt.Printf("%d [%s]: GetGlobalPoints -> w.startTop: %f\n", i, name, w.StartTop())
 	}
 }
 
@@ -225,6 +224,25 @@ func (c *container) SmoothByTime(name string, list []points.PointTime, sts ...st
 	}
 
 	lines.SmoothByTime(w.Plast, list, sts...)
+	return nil
+}
+func (c *container) VerByTime(name string, x time.Time, sts ...style.STYLE) error {
+	w, ok := c.windows[name]
+	if !ok {
+		return fmt.Errorf("window %s not found", name)
+	}
+
+	lines.VerByTime(w.Plast, x, sts...)
+	return nil
+}
+
+func (c *container) Hor(name string, y1 int, sts ...style.STYLE) error {
+	w, ok := c.windows[name]
+	if !ok {
+		return fmt.Errorf("window %s not found", name)
+	}
+
+	lines.Hor(w.Plast, y1, sts...)
 	return nil
 }
 
