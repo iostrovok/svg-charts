@@ -57,11 +57,11 @@ func Base(g *plast.Plast, vol OneVolume) (err error) {
 	}
 
 	if vol.Debug {
-		fmt.Printf("x1: %d, g.GetPoint(volumeV): %f, volumeV: %f, width: %f\n", x1, g.GetPoint(volumeV), volumeV, width)
+		fmt.Printf("outX1: %d, g.GetPoint(outY1): %f, outY1: %f, width: %f\n", outX1, g.GetPoint(outY1), outY1, width)
 	}
 
 	title := svg.Title(text)
-	resc := svg.Rect(x1, g.GetPoint(volumeV), width, float64(volumeV), st).Append(title)
+	resc := svg.Rect(outX1, g.GetPoint(outY1), width, float64(outY1), st).Append(title)
 	g.G.Append(resc)
 
 	return nil
