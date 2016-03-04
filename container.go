@@ -12,6 +12,7 @@ import (
 	"github.com/iostrovok/svg-charts/points"
 	"github.com/iostrovok/svg-charts/window"
 
+	hist "github.com/iostrovok/svg-charts/ext/hist"
 	lines "github.com/iostrovok/svg-charts/ext/lines"
 	stock "github.com/iostrovok/svg-charts/ext/stock"
 )
@@ -226,6 +227,7 @@ func (c *container) SmoothByTime(name string, list []points.PointTime, sts ...st
 	lines.SmoothByTime(w.Plast, list, sts...)
 	return nil
 }
+
 func (c *container) VerByTime(name string, x time.Time, sts ...style.STYLE) error {
 	w, ok := c.windows[name]
 	if !ok {
@@ -243,6 +245,16 @@ func (c *container) Hor(name string, y1 int, sts ...style.STYLE) error {
 	}
 
 	lines.Hor(w.Plast, y1, sts...)
+	return nil
+}
+
+//
+func (c *container) BaseHist(name string, vol hist.OneVolume) error {
+	w, ok := c.windows[name]
+	if !ok {
+		return fmt.Errorf("window %s not found", name)
+	}
+	hist.Base(w.Plast, vol)
 	return nil
 }
 
