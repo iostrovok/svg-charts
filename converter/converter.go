@@ -40,6 +40,10 @@ func (c *Converter) GetTimeX(x time.Time) (float64, error) {
 	return outX, nil
 }
 
+func (c *Converter) GetSizeY(y float64) (float64, error) {
+	return y * c.koef, nil
+}
+
 func (c *Converter) GetY(y float64) (float64, error) {
 
 	if y < c.startY || c.finishY < y {
