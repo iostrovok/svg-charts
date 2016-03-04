@@ -5,7 +5,7 @@ export GOPATH := ${GOPATH}
 
 
 
-test: test-converter test-grid test-plast test-ext-stock test-ext-lines test-window test-svg
+test: test-converter test-grid test-plast test-ext-stock test-ext-lines test-ext-hist test-window test-svg
 
 test-svg:
 	@go test ./
@@ -29,6 +29,9 @@ test-ext-stock:
 
 test-ext-lines:
 	@cd ./ext/lines && go test ./
+
+test-ext-hist:
+	@cd ./ext/hist && go test ./
 
 
 # reinstall
