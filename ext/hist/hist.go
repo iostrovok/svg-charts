@@ -66,8 +66,13 @@ func Base(g *plast.Plast, vol OneVolume) (err error) {
 		fmt.Printf("outX1: %d, g.GetPoint(outY1): %f, outY1: %f, width: %f\n", outX1, g.GetPoint(outY1), outY1, width)
 	}
 
+	y, err = converter.GetSizeY(math.Abs(float64(y)))
+	if err != nil {
+		return err
+	}
+
 	title := svg.Title(text)
-	resc := svg.Rect(outX1, g.GetPoint(outY1), width, converter.GetSizeY(math.Abs(float64(vol.Y))), st).Append(title)
+	resc := svg.Rect(outX1, g.GetPoint(outY1), width, y, st).Append(title)
 	g.G.Append(resc)
 
 	return nil

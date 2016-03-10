@@ -41,6 +41,10 @@ func (c *Converter) GetTimeX(x time.Time) (float64, error) {
 }
 
 func (c *Converter) GetSizeY(y float64) (float64, error) {
+	if y < c.startY || c.finishY < y {
+		return 0, fmt.Errorf("Bad Y: %f < %f || %f < %f", y, c.startY, c.finishY, y)
+	}
+
 	return y * c.koef, nil
 }
 
