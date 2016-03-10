@@ -2,6 +2,7 @@ package hist
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	"github.com/iostrovok/svg"
@@ -34,7 +35,12 @@ func Base(g *plast.Plast, vol OneVolume) (err error) {
 
 	converter := g.Converter()
 
-	outX1, outY1, err := converter.GetByTime(vol.T, float64(vol.BaseY+vol.Y))
+	y := vol.BaseY
+	if vol.Y < 0 {
+		y = vol.BaseY - vol.Y
+	}
+
+	outX1, outY1, err := converter.GetByTime(vol.T, float64(y))
 	if err != nil {
 		return err
 	}
@@ -61,7 +67,7 @@ func Base(g *plast.Plast, vol OneVolume) (err error) {
 	}
 
 	title := svg.Title(text)
-	resc := svg.Rect(outX1, g.GetPoint(outY1), width, float64(outY1), st).Append(title)
+	resc := svg.Rect(outX1, g.GetPoint(outY1), width, converter.GetSizeY(math.Abs(float64(vol.Y))), st).Append(title)
 	g.G.Append(resc)
 
 	return nil
