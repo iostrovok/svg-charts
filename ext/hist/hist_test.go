@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/iostrovok/svg-charts/plast"
-	//"github.com/iostrovok/svg-charts/points"
+	"github.com/iostrovok/svg/style"
 )
 
 func TestHist(t *testing.T) {
@@ -27,6 +27,10 @@ func _stock_time_test(c *C, str string) time.Time {
 func (s HistTestsSuite) Test_Base(c *C) {
 	// c.Skip("Not now")
 
+	res := `<g style="fill:rgb(240,240,240)"><rect height="10" width="5" x="50" y="40"><title>2015-02-01 15:30:00
+volume: 10</title></rect><rect height="10" width="5" x="58.33" y="50"><title>2015-02-01 15:35:00
+volume: -10</title></rect></g>`
+
 	timeLeft := _stock_time_test(c, "2015-02-01 15:00:00")
 	timeRight := _stock_time_test(c, "2015-02-01 16:00:00")
 	realYBottom := 0.0
@@ -40,9 +44,10 @@ func (s HistTestsSuite) Test_Base(c *C) {
 	t := _stock_time_test(c, "2015-02-01 15:30:00")
 	cnd := OneVolume{
 		T:     t,
-		Y:     10,
+		Value: 10,
 		BaseY: 50,
 		Debug: true,
+		St:    style.Style().Ref(),
 	}
 
 	err := Base(p, cnd)
@@ -51,15 +56,18 @@ func (s HistTestsSuite) Test_Base(c *C) {
 	t1 := _stock_time_test(c, "2015-02-01 15:35:00")
 	cnd = OneVolume{
 		T:     t1,
-		Y:     -10,
+		Value: -10,
 		BaseY: 50,
 		Debug: true,
+		St:    style.Style().Ref(),
 	}
 
 	err = Base(p, cnd)
 	c.Assert(err, IsNil)
 
 	fmt.Printf("\n------\np.G.Source(): %s\n------\n", p.G.Source())
-	c.Assert(false, IsNil)
+
+	c.Assert(p.G.Source(), Equals, res)
+	// c.Assert(false, IsNil)
 
 }

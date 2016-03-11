@@ -14,7 +14,7 @@ import (
 type OneVolume struct {
 	T     time.Time
 	Text  string
-	Y     int
+	Value int
 	Width int
 	BaseY int
 	St    *style.STYLE
@@ -30,14 +30,14 @@ func Base(g *plast.Plast, vol OneVolume) (err error) {
 	}()
 
 	if vol.Debug {
-		fmt.Printf("vol.T: %s, vol.BaseY: %d, vol.Y: %d, vol.Width: %d\n", vol.T.Format("2006-01-02 15:04:05"), vol.BaseY, vol.Y, vol.Width)
+		fmt.Printf("vol.T: %s, vol.BaseY: %d, vol.volue: %d, vol.Width: %d\n", vol.T.Format("2006-01-02 15:04:05"), vol.BaseY, vol.Value, vol.Width)
 	}
 
 	converter := g.Converter()
 
 	y := vol.BaseY
-	if vol.Y < 0 {
-		y = vol.BaseY - vol.Y
+	if vol.Value > 0 {
+		y = vol.BaseY + vol.Value
 	}
 
 	outX1, outY1, err := converter.GetByTime(vol.T, float64(y))
@@ -52,7 +52,7 @@ func Base(g *plast.Plast, vol OneVolume) (err error) {
 
 	text := vol.Text
 	if vol.Text == "" {
-		text = fmt.Sprintf("%s\nvolume: %d", vol.T.Format("2006-01-02 15:04:05"), vol.Y)
+		text = fmt.Sprintf("%s\nvolume: %d", vol.T.Format("2006-01-02 15:04:05"), vol.Value)
 	}
 
 	var st style.STYLE
@@ -63,16 +63,16 @@ func Base(g *plast.Plast, vol OneVolume) (err error) {
 	}
 
 	if vol.Debug {
-		fmt.Printf("outX1: %d, g.GetPoint(outY1): %f, outY1: %f, width: %f\n", outX1, g.GetPoint(outY1), outY1, width)
+		fmt.Printf("outX1: %f, g.GetPoint(outY1): %f, outY1: %f, width: %f\n", outX1, g.GetPoint(outY1), outY1, width)
 	}
 
-	y, err = converter.GetSizeY(int(math.Abs(float64(y))))
+	value, err := converter.GetSizeY(math.Abs(float64(vol.Value)))
 	if err != nil {
 		return err
 	}
 
 	title := svg.Title(text)
-	resc := svg.Rect(outX1, g.GetPoint(outY1), width, y, st).Append(title)
+	resc := svg.Rect(outX1, g.GetPoint(outY1), width, float64(value), st).Append(title)
 	g.G.Append(resc)
 
 	return nil
